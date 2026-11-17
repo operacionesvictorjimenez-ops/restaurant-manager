@@ -7,7 +7,7 @@ import { logout } from "@/app/login/actions";
 
 export function TopBar({ session, restaurantName }: { session: Session; restaurantName?: string }) {
   return (
-    <div className="flex flex-wrap items-center gap-3">
+    <div className="flex flex-wrap items-center gap-3 print:hidden">
       {restaurantName &&
         (session.kind === "kiosk" ? (
           <div className="flex min-h-12 items-center gap-2 rounded-xl border border-line bg-surface px-4 font-bold">

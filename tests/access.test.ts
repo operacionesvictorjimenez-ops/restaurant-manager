@@ -43,7 +43,7 @@ describe("visibilidad de restaurantes", () => {
     expect(await codes(admin)).toEqual(all);
   });
   it("la encargada solo ve los autorizados", async () => {
-    expect(await codes(manager)).toEqual(["CENTRO", "PUERTO"]);
+    expect(await codes(manager)).toEqual(["CENTRO", "MOSTOLES", "PUERTO"]);
   });
   it("la tablet solo ve su propio local", async () => {
     expect(await codes(playa)).toEqual(["PLAYA"]);

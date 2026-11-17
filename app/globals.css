@@ -37,3 +37,9 @@ body {
 }
 :focus-visible { outline: 3px solid var(--color-accent); outline-offset: 2px; }
 .tnum { font-variant-numeric: tabular-nums; }
+
+@media print {
+  @page { size: A4; margin: 14mm; }
+  body { background: #fff; }
+  main { padding: 0 !important; }
+}

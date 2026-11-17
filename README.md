@@ -18,6 +18,15 @@ Plataforma de gestión operativa para los restaurantes del grupo: temperaturas, 
 - El aislamiento entre restaurantes lo aplica la base de datos (RLS), no la interfaz.
 - Todo cambio en restaurantes, cuentas, asignaciones y PIN queda en `audit_log`, que no se puede modificar desde la API.
 
+## Temperaturas (Fase 1)
+
+- Cada restaurante nuevo se crea con **7 cámaras de refrigeración (0 a 4 °C) y 4 de congelación (≤ −18 °C)**; se puede cambiar al crearlo y después en *Administración → Restaurantes → Cámaras*.
+- Horario de controles por restaurante (por defecto 09:00 y 17:00, margen de 60 min). Pasado el margen, el control aparece como atrasado.
+- Las lecturas no se pueden modificar ni borrar. Fuera de rango exige acción correctora, abre una incidencia y pide volver a medir.
+- Las incidencias las cierra un encargado o el administrador, indicando la resolución.
+- Si se cae la conexión al guardar, la lectura queda en la tablet y se envía sola al volver la red (sin duplicados).
+- Histórico con gráficas, exportación a Excel (CSV) e informe imprimible / PDF para inspección.
+
 ## Desarrollo local
 
 Requisitos: Node 20+, Docker.
@@ -35,13 +44,16 @@ Datos de prueba (`npm run db:reset`):
 - Admin: `admin@demo.local` / `Admin-Demo-2026`
 - Encargada (Centro y Puerto): `encargada@demo.local` / `Encargada-Demo-2026`
 - PIN de los locales de prueba: `1234`
+- Móstoles (piloto): 4 cámaras de refrigeración + 3 de congelación, con una semana de lecturas de ejemplo
+- Restaurante Centro: las 7 + 4 cámaras por defecto
 
 ## Pruebas
 
 ```bash
 npm test                               # unitarias + aislamiento entre restaurantes (necesita Supabase local)
 npm run build && npm start             # en otra terminal:
-node tests/e2e/smoke.mjs               # recorrido completo en navegador (Playwright)
+node tests/e2e/smoke.mjs               # Fase 0 en navegador (Playwright)
+node tests/e2e/temperaturas.mjs        # Fase 1 en navegador
 ```
 
 ## Producción
@@ -70,7 +82,7 @@ tests/                pruebas unitarias, de acceso y e2e
 ## Fases
 
 - [x] **Fase 0** · Cimientos: restaurantes, encargados, PIN del local, RLS, auditoría
-- [ ] **Fase 1** · Temperaturas e incidencias
+- [x] **Fase 1** · Temperaturas e incidencias (piloto: Móstoles)
 - [ ] Fase 2 · Etiquetas de caducidad
 - [ ] Fase 3 · Recetario y escandallos
 - [ ] Fase 4 · Formación

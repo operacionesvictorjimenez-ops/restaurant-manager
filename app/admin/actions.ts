@@ -9,6 +9,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { requireSession } from "@/lib/session";
 import { slugify } from "@/lib/format";
 import { UNLOCK_COOKIE } from "@/lib/unlock";
+import { createStandardUnits, DEFAULT_UNIT_COUNTS } from "@/lib/units";
 
 export type FormState = { error?: string; ok?: string } | null;
 
@@ -22,13 +23,15 @@ const restaurantSchema = z.object({
   name: z.string().trim().min(2, "Escribe el nombre del restaurante.").max(80),
   address: z.string().trim().max(200).optional(),
   pin: z.string().regex(/^[0-9]{4,6}$/, "El PIN debe tener entre 4 y 6 cifras."),
+  cr_count: z.coerce.number().int().min(0, "Número de cámaras no válido.").max(20, "Máximo 20 cámaras de cada tipo.").default(DEFAULT_UNIT_COUNTS.refrigeracion),
+  cf_count: z.coerce.number().int().min(0, "Número de cámaras no válido.").max(20, "Máximo 20 cámaras de cada tipo.").default(DEFAULT_UNIT_COUNTS.congelacion),
 });
 
 export async function createRestaurant(_: FormState, fd: FormData): Promise<FormState> {
   await requireSession(["admin"]);
   const parsed = restaurantSchema.safeParse(Object.fromEntries(fd));
   if (!parsed.success) return { error: parsed.error.issues[0].message };
-  const { code, name, address, pin } = parsed.data;
+  const { code, name, address, pin, cr_count, cf_count } = parsed.data;
 
   const supabase = await createClient();
   const { data: org } = await supabase.from("organizations").select("id").limit(1).single();
@@ -58,6 +61,9 @@ export async function createRestaurant(_: FormState, fd: FormData): Promise<Form
 
   const { error: pinErr } = await supabase.rpc("set_restaurant_pin", { rid: r.id, pin });
   if (pinErr) return { error: "Restaurante creado, pero no se pudo guardar el PIN." };
+
+  const { error: unitsErr } = await createStandardUnits(supabase, r.id, { refrigeracion: cr_count, congelacion: cf_count });
+  if (unitsErr) return { error: "Restaurante creado, pero no se pudieron crear las cámaras. Créalas desde su ficha." };
 
   revalidatePath("/admin/restaurantes");
   redirect(`/admin/restaurantes/${r.id}`);

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Tablet, ArrowLeft } from "lucide-react";
+import { Tablet, ArrowLeft, Thermometer } from "lucide-react";
+import { LinkButton } from "@/components/ui";
 import { createClient } from "@/lib/supabase/server";
 import { requireSession } from "@/lib/session";
 import { formatDateTime } from "@/lib/format";
@@ -35,6 +36,11 @@ export default async function RestaurantDetail({
     <>
       <Link href="/admin/restaurantes" className="flex items-center gap-2 text-sm font-semibold text-muted"><ArrowLeft className="size-4" />Restaurantes</Link>
       <PageTitle sub={<><span className="font-mono font-bold">{r.code}</span> · {r.active ? "Activo" : "Desactivado"}</>}>{r.name}</PageTitle>
+
+      <div className="flex flex-wrap gap-2">
+        <LinkButton href={`/admin/restaurantes/${r.id}/camaras`} variant="ghost"><Thermometer className="size-5" />Cámaras y horario de controles</LinkButton>
+        <LinkButton href={`/r/${r.slug}`} variant="ghost">Abrir el panel del local</LinkButton>
+      </div>
 
       <div className="grid gap-5 xl:grid-cols-2">
         <Card className="grid content-start gap-4">

@@ -3,8 +3,6 @@ import { Construction } from "lucide-react";
 import { LinkButton } from "@/components/ui";
 
 const MODULES: Record<string, { name: string; phase: string }> = {
-  temperaturas: { name: "Temperaturas", phase: "Fase 1" },
-  incidencias: { name: "Incidencias", phase: "Fase 1" },
   etiquetas: { name: "Etiquetas", phase: "Fase 2" },
   recetas: { name: "Recetario", phase: "Fase 3" },
   formacion: { name: "Formación", phase: "Fase 4" },

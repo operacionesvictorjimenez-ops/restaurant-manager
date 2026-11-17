@@ -5,6 +5,7 @@ import { Card, Field, PageTitle, Pill, inputClass } from "@/components/ui";
 import { ActionForm } from "@/components/action-form";
 import { SubmitButton } from "@/components/submit-button";
 import { createRestaurant } from "../actions";
+import { DEFAULT_UNIT_COUNTS } from "@/lib/units";
 
 export const metadata = { title: "Restaurantes · Administración" };
 
@@ -63,6 +64,14 @@ export default async function AdminRestaurants() {
             <Field label="PIN del local" hint="4 a 6 cifras. Lo usará todo el equipo en la tablet.">
               <input id="new-pin" name="pin" required inputMode="numeric" pattern="[0-9]{4,6}" maxLength={6} className={`${inputClass} max-w-40 font-mono`} />
             </Field>
+            <div className="grid gap-4 sm:grid-cols-2">
+              <Field label="Cámaras de refrigeración" hint="Se crean CR-1, CR-2… (0 a 4 °C)">
+                <input id="new-cr" name="cr_count" type="number" min={0} max={20} defaultValue={DEFAULT_UNIT_COUNTS.refrigeracion} className={`${inputClass} max-w-32`} />
+              </Field>
+              <Field label="Cámaras de congelación" hint="Se crean CF-1, CF-2… (≤ −18 °C)">
+                <input id="new-cf" name="cf_count" type="number" min={0} max={20} defaultValue={DEFAULT_UNIT_COUNTS.congelacion} className={`${inputClass} max-w-32`} />
+              </Field>
+            </div>
             <SubmitButton pendingText="Creando…" className="justify-self-start">Crear restaurante</SubmitButton>
           </ActionForm>
         </Card>

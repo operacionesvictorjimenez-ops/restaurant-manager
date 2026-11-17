@@ -2,13 +2,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Home, Thermometer, Tag, BookOpen, PlayCircle, Settings, Building2, Users, History, type LucideIcon,
+  Home, Thermometer, Tag, BookOpen, PlayCircle, Settings, Building2, Users, History, TriangleAlert, type LucideIcon,
 } from "lucide-react";
 import { cx } from "@/components/ui";
 
 const ICONS: Record<string, LucideIcon> = {
   home: Home, thermo: Thermometer, tag: Tag, book: BookOpen, play: PlayCircle, settings: Settings,
-  building: Building2, users: Users, history: History,
+  building: Building2, users: Users, history: History, alert: TriangleAlert,
 };
 
 export type NavItem = { href: string; label: string; icon: keyof typeof ICONS; exact?: boolean; soon?: boolean };
@@ -18,7 +18,7 @@ export function Sidebar({ items }: { items: NavItem[] }) {
   return (
     <nav
       aria-label="Principal"
-      className="flex gap-1 overflow-x-auto bg-side p-2 text-side-ink md:min-h-full md:w-28 md:flex-col md:overflow-visible md:p-3"
+      className="flex gap-1 overflow-x-auto bg-side print:hidden p-2 text-side-ink md:min-h-full md:w-28 md:flex-col md:overflow-visible md:p-3"
     >
       <Link href="/" className="mx-auto mb-3 hidden size-12 place-items-center rounded-xl bg-accent font-display text-xl font-extrabold text-white md:grid">
         RM

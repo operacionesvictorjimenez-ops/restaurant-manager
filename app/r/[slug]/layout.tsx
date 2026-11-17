@@ -2,6 +2,7 @@ import { requireSession } from "@/lib/session";
 import { Sidebar, type NavItem } from "@/components/sidebar";
 import { TopBar } from "@/components/top-bar";
 import { IdleLock } from "@/components/idle-lock";
+import { QueueSync } from "@/components/reading-queue";
 import { getRestaurant } from "./data";
 
 export default async function RestaurantLayout({
@@ -17,7 +18,8 @@ export default async function RestaurantLayout({
   const base = `/r/${r.slug}`;
   const items: NavItem[] = [
     { href: base, label: "Inicio", icon: "home", exact: true },
-    { href: `${base}/temperaturas`, label: "Temperaturas", icon: "thermo", soon: true },
+    { href: `${base}/temperaturas`, label: "Temperaturas", icon: "thermo" },
+    { href: `${base}/incidencias`, label: "Incidencias", icon: "alert" },
     { href: `${base}/etiquetas`, label: "Etiquetas", icon: "tag", soon: true },
     { href: `${base}/recetas`, label: "Recetas", icon: "book", soon: true },
     { href: `${base}/formacion`, label: "Formación", icon: "play", soon: true },
@@ -30,6 +32,7 @@ export default async function RestaurantLayout({
       <Sidebar items={items} />
       <main className="grid flex-1 content-start gap-5 p-4 md:p-6">
         <TopBar session={session} restaurantName={r.name} />
+        <QueueSync />
         {children}
       </main>
       {session.kind === "kiosk" && <IdleLock minutes={idleMinutes} />}
